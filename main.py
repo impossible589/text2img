@@ -2,7 +2,11 @@ from fastapi import FastAPI, WebSocket
 
 app = FastAPI()
 
-@app.websocket("/ws")
+@app.get("/")
+def home():
+    return {"status": "running"}
+
+@app.websocket("/ws")   # 🔥 THIS IS REQUIRED
 async def websocket_endpoint(ws: WebSocket):
     await ws.accept()
     while True:
