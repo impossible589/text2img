@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text2Image AI</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e1e2f, #3a3a6a);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 20px;
+        width: 350px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        text-align: center;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+        border-radius: 10px;
+        border: none;
+        padding: 10px;
+        resize: none;
+        font-size: 14px;
+        outline: none;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 12px;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        background: #6c63ff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #5750d4;
+    }
+
+    .image-box {
+        margin-top: 20px;
+        width: 100%;
+        height: 200px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #ccc;
+        overflow: hidden;
+    }
+
+    img {
+        max-width: 100%;
+        border-radius: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎨 Text to Image AI</h1>
+    <textarea id="prompt" placeholder="Describe your image..."></textarea>
+    <button onclick="generateImage()">Generate Image</button>
+
+    <div class="image-box" id="imageBox">
+        Your image will appear here
+    </div>
+</div>
+
+<script>
+function generateImage() {
+    fentchdatafromserver()
+    const prompt = document.getElementById("prompt").value;
+    const imageBox = document.getElementById("imageBox");
+
+    if (!prompt.trim()) {
+        imageBox.innerHTML = "Please enter a prompt";
+        return;
+    }
+
+    // Demo placeholder (replace with real API later)
+    imageBox.innerHTML = "Generating...";
+
+    setTimeout(() => {
+        imageBox.innerHTML = `<img src="https://picsum.photos/400?random=${Math.random()}" alt="Generated Image">`;
+    }, 1500);
+}
+function fentchdatafromserver(){
+     const prompt = document.getElementById("prompt").value;
+     const value = `shell - ${prompt}`;
+
+     fetch(`http://127.0.0.1:8000/main_handler?parcel=${encodeURIComponent(value)}`)
+
+    .then(response => response.json())   // or .text() if plain text
+    .then(data => {
+        console.log(data);               // see in console
+        document.getElementById("output").innerText = data.message;
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+
+</script>
+
+</body>
+</html>
