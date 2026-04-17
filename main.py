@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI, WebSocket,File ,UploadFile, Request
-from fastapi.templating import Jinja2Templates
+
 from fastapi.responses import FileResponse
 app = FastAPI()
 
