@@ -62,7 +62,7 @@
     .image-box {
         margin-top: 20px;
         width: 100%;
-        height: 200px;
+        height: 100%;
         background: rgba(255,255,255,0.1);
         border-radius: 15px;
         display: flex;
@@ -93,7 +93,7 @@
 
 <script>
 function generateImage() {
-    fentchdatafromserver()
+    sendpromptdata();
     const prompt = document.getElementById("prompt").value;
     const imageBox = document.getElementById("imageBox");
 
@@ -106,24 +106,47 @@ function generateImage() {
     imageBox.innerHTML = "Generating...";
 
     setTimeout(() => {
-        imageBox.innerHTML = `<img src="https://picsum.photos/400?random=${Math.random()}" alt="Generated Image">`;
+        imageBox.innerHTML = `<img src="https://text2img-9npa.onrender.com/static/base.png?t=${Date.now()}" alt="Generated Image">`;
     }, 1500);
 }
-function fentchdatafromserver(){
+function sendpromptdata(){
      const prompt = document.getElementById("prompt").value;
-     const value = `shell - ${prompt}`;
+     const value = `shell-${prompt}`;
 
-     fetch(`http://127.0.0.1:8000/main_handler?parcel=${encodeURIComponent(value)}`)
+     fetch(`https://text2img-9npa.onrender.com/front_handler?parcel=${encodeURIComponent(value)}`)
 
     .then(response => response.json())   // or .text() if plain text
     .then(data => {
         console.log(data);               // see in console
-        document.getElementById("output").innerText = data.message;
+        //document.getElementById("output").innerText = data.message;
+
     })
     .catch(error => console.error("Error:", error));
 }
 
 
+  function mainlooper() {
+
+    setInterval(() => {
+        const value = "statuscheck";
+
+        fetch(`https://text2img-9npa.onrender.com/front_handler?parcel=${encodeURIComponent(value)}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if(data.info == "diffus_progress"){
+
+                const imageBox = document.getElementById("imageBox");
+                imageBox.innerHTML = data.progress;
+                }
+
+            })
+            .catch(error => console.error("Error:", error));
+
+    }, 2000);
+
+}
+mainlooper();
 </script>
 
 </body>
