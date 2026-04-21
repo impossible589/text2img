@@ -105,9 +105,9 @@ function generateImage() {
     // Demo placeholder (replace with real API later)
     imageBox.innerHTML = "Generating...";
 
-    setTimeout(() => {
-        imageBox.innerHTML = `<img src="https://text2img-9npa.onrender.com/static/base.png?t=${Date.now()}" alt="Generated Image">`;
-    }, 1500);
+    //setTimeout(() => {
+        //imageBox.innerHTML = `<img src="https://text2img-9npa.onrender.com/static/base.png?t=${Date.now()}" alt="Generated Image">`;
+   // }, 1500);
 }
 function sendpromptdata(){
      const prompt = document.getElementById("prompt").value;
@@ -126,18 +126,22 @@ function sendpromptdata(){
 
 
   function mainlooper() {
-
+     const imageBox = document.getElementById("imageBox");
     setInterval(() => {
         const value = "statuscheck";
-
+        
         fetch(`https://text2img-9npa.onrender.com/front_handler?parcel=${encodeURIComponent(value)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
                 if(data.info == "diffus_progress"){
 
-                const imageBox = document.getElementById("imageBox");
+                
                 imageBox.innerHTML = data.value.toString();
+                
+                }
+                if(data.info == "imageisready"){
+                    imageBox.innerHTML = `<img src="https://text2img-9npa.onrender.com/static/base.png?t=${Date.now()}" alt="Generated Image">`;
                 }
 
             })
