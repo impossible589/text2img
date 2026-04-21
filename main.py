@@ -25,9 +25,11 @@ async def get_item1():
     if(prompt==""):
        return {"task":"null"}
     else:
+        tprompt = prompt 
+        prompt = ""
         return {
-
-        "task": "shell", "prompt": str(prompt)
+         
+        "task": "shell", "prompt": str(tprompt)
 
     }
 
