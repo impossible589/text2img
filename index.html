@@ -92,6 +92,7 @@
 </div>
 
 <script>
+    var site = "https://text2img-9npa.onrender.com";
 function generateImage() {
     sendpromptdata();
     const prompt = document.getElementById("prompt").value;
@@ -113,7 +114,7 @@ function sendpromptdata(){
      const prompt = document.getElementById("prompt").value;
      const value = `shell-${prompt}`;
 
-     fetch(`https://text2img-9npa.onrender.com/front_handler?parcel=${encodeURIComponent(value)}`)
+     fetch(`${site}/front_handler?parcel=${encodeURIComponent(value)}`)
 
     .then(response => response.json())   // or .text() if plain text
     .then(data => {
@@ -130,7 +131,7 @@ function sendpromptdata(){
     setInterval(() => {
         const value = "statuscheck";
         
-        fetch(`https://text2img-9npa.onrender.com/front_handler?parcel=${encodeURIComponent(value)}`)
+        fetch(`${site}/front_handler?parcel=${encodeURIComponent(value)}`)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -141,7 +142,7 @@ function sendpromptdata(){
                 
                 }
                 if(data.info == "imageisready"){
-                    imageBox.innerHTML = `<img src="https://text2img-9npa.onrender.com/static/base.png?t=${Date.now()}" alt="Generated Image">`;
+                    imageBox.innerHTML = `<img src="${site}/static/base.png?t=${Date.now()}" alt="Generated Image">`;
                 }
 
             })
